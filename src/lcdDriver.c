@@ -183,6 +183,11 @@ void clearGraphicsLcd()
 
 void initGraphicsLcd()
 {
+    // Turn-on all LEDs to create white backlight
+    RED_BL_LED = 1;
+    GREEN_BL_LED = 1;
+    BLUE_BL_LED = 1;
+
     sendGraphicsLcdCommand(0x40); // set start line to 0
     sendGraphicsLcdCommand(0xA1); // reverse horizontal order
     sendGraphicsLcdCommand(0xC0); // normal vertical order

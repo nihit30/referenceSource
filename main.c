@@ -292,20 +292,38 @@ void timer1ISR()
             TIMER1_ICR_R = TIMER_ICR_TATOCINT;               // clear interrupt flag
 }
 
+void blinkLED()
+{
+    BLUE_LED = 1;
+        waitMicrosecond(5000);
+        BLUE_LED = 0;
+}
 
 int main(void)
 {
 
     initHw();
-    BLUE_LED = 1;
-    waitMicrosecond(5000);
-    BLUE_LED = 0;
+    blinkLED();
+    initGraphicsLcd();
     createPacket(&data, dataLength);
+
+    // Draw X in left half of screen
+    uint8_t i;
+    for (i = 0; i < 64; i++)
+        drawGraphicsLcdPixel(i, i, SET);
+    for (i = 0; i < 64; i++)
+        drawGraphicsLcdPixel(63 - i, i, INVERT);
+
+    // Draw text on screen
+    setGraphicsLcdTextPosition(84, 5);
+    putsGraphicsLcd("Text");
+
     TIMER1_IMR_R = TIMER_IMR_TATOIM;                 // turn-on interrupts
 
-    while(1)
+    while (1)
     {
-
+        drawGraphicsLcdRectangle(83, 39, 25, 9, INVERT);
+        waitMicrosecond(500000);
 
     }
 }

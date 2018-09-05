@@ -1,32 +1,33 @@
 ******************************************************************************
                   TI ARM Linker Unix v18.1.1                   
 ******************************************************************************
->> Linked Wed Sep  5 15:45:06 2018
+>> Linked Wed Sep  5 15:51:34 2018
 
 OUTPUT FILE NAME:   <ReferenceSource.out>
-ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 0000096d
+ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00000f61
 
 
 MEMORY CONFIGURATION
 
          name            origin    length      used     unused   attr    fill
 ----------------------  --------  ---------  --------  --------  ----  --------
-  FLASH                 00000000   00040000  00000a1c  0003f5e4  R  X
-  SRAM                  20000000   00008000  00000227  00007dd9  RW X
+  FLASH                 00000000   00040000  000011fe  0003ee02  R  X
+  SRAM                  20000000   00008000  00000629  000079d7  RW X
 
 
 SEGMENT ALLOCATION MAP
 
 run origin  load origin   length   init length attrs members
 ----------  ----------- ---------- ----------- ----- -------
-00000000    00000000    00000a20   00000a20    r-x
+00000000    00000000    00001200   00001200    r-x
   00000000    00000000    0000026c   0000026c    r-- .intvecs
-  0000026c    0000026c    00000780   00000780    r-x .text
-  000009f0    000009f0    00000030   00000030    r-- .cinit
-20000000    20000000    00000227   00000000    rw-
-  20000000    20000000    00000200   00000000    rw- .stack
-  20000200    20000200    00000026   00000000    rw- .bss
-  20000226    20000226    00000001   00000000    rw- .data
+  0000026c    0000026c    00000d6e   00000d6e    r-x .text
+  00000fda    00000fda    000001f4   000001f4    r-- .const
+  000011d0    000011d0    00000030   00000030    r-- .cinit
+20000000    20000000    0000062b   00000000    rw-
+  20000000    20000000    00000426   00000000    rw- .bss
+  20000428    20000428    00000200   00000000    rw- .stack
+  20000628    20000628    00000003   00000000    rw- .data
 
 
 SECTION ALLOCATION MAP
@@ -37,82 +38,96 @@ section   page    origin      length       input sections
 .intvecs   0    00000000    0000026c     
                   00000000    0000026c     tm4c123gh6pm_startup_ccs.obj (.intvecs)
 
-.text      0    0000026c    00000780     
-                  0000026c    000005b8     main.obj (.text)
-                  00000824    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.asm.obj (.text)
-                  000008c0    00000068                                   : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
-                  00000928    00000044                                   : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit:__TI_auto_init_nobinit_nopinit)
-                  0000096c    00000038                                   : boot_cortex_m.c.obj (.text:_c_int00_noargs:_c_int00_noargs)
-                  000009a4    00000014                                   : strlen.c.obj (.text:strlen)
-                  000009b8    00000012                                   : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init_nomemset:__TI_zero_init_nomemset)
-                  000009ca    0000000e                                   : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
-                  000009d8    0000000c     tm4c123gh6pm_startup_ccs.obj (.text)
-                  000009e4    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
-                  000009e8    00000004                                   : exit.c.obj (.text:abort:abort)
+.text      0    0000026c    00000d6e     
+                  0000026c    0000065c     main.obj (.text)
+                  000008c8    000004d4     lcdDriver.obj (.text)
+                  00000d9c    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.asm.obj (.text)
+                  00000e38    0000007a                                   : memset_t2.asm.obj (.text)
+                  00000eb2    00000068                                   : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
+                  00000f1a    00000002     --HOLE-- [fill = 0]
+                  00000f1c    00000044                                   : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit:__TI_auto_init_nobinit_nopinit)
+                  00000f60    00000038                                   : boot_cortex_m.c.obj (.text:_c_int00_noargs:_c_int00_noargs)
+                  00000f98    00000014                                   : strlen.c.obj (.text:strlen)
+                  00000fac    0000000e                                   : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
+                  00000fba    0000000c                                   : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init)
+                  00000fc6    0000000c     tm4c123gh6pm_startup_ccs.obj (.text)
+                  00000fd2    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
+                  00000fd6    00000004                                   : exit.c.obj (.text:abort:abort)
 
-.cinit     0    000009f0    00000030     
-                  000009f0    0000000c     (__TI_handler_table)
-                  000009fc    00000004     --HOLE-- [fill = 0]
-                  00000a00    00000008     (.cinit..bss.load) [load image, compression = zero_init]
-                  00000a08    00000005     (.cinit..data.load) [load image, compression = lzss]
-                  00000a0d    00000003     --HOLE-- [fill = 0]
-                  00000a10    00000010     (__TI_cinit_table)
+.const     0    00000fda    000001f4     
+                  00000fda    000001f4     lcdDriver.obj (.const:charGen)
+
+.cinit     0    000011d0    00000030     
+                  000011d0    0000000c     (__TI_handler_table)
+                  000011dc    00000004     --HOLE-- [fill = 0]
+                  000011e0    00000008     (.cinit..bss.load) [load image, compression = zero_init]
+                  000011e8    00000007     (.cinit..data.load) [load image, compression = lzss]
+                  000011ef    00000001     --HOLE-- [fill = 0]
+                  000011f0    00000010     (__TI_cinit_table)
 
 .init_array 
 *          0    00000000    00000000     UNINITIALIZED
 
-.bss       0    20000200    00000026     UNINITIALIZED
-                  20000200    00000014     (.common:packet)
-                  20000214    0000000c     (.common:data)
-                  20000220    00000004     (.common:sum)
-                  20000224    00000002     (.common:chksum)
+.bss       0    20000000    00000426     UNINITIALIZED
+                  20000000    00000400     (.common:pixelMap)
+                  20000400    00000014     (.common:packet)
+                  20000414    0000000c     (.common:data)
+                  20000420    00000004     (.common:sum)
+                  20000424    00000002     (.common:chksum)
 
-.data      0    20000226    00000001     UNINITIALIZED
-                  20000226    00000001     main.obj (.data)
+.data      0    20000628    00000003     UNINITIALIZED
+                  20000628    00000002     lcdDriver.obj (.data)
+                  2000062a    00000001     main.obj (.data)
 
-.stack     0    20000000    00000200     UNINITIALIZED
-                  20000000    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : boot_cortex_m.c.obj (.stack)
-                  20000004    000001fc     --HOLE--
+.stack     0    20000428    00000200     UNINITIALIZED
+                  20000428    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : boot_cortex_m.c.obj (.stack)
+                  2000042c    000001fc     --HOLE--
 
 MODULE SUMMARY
 
        Module                         code   ro data   rw data
        ------                         ----   -------   -------
     ./
-       main.obj                       1464   0         39     
+       main.obj                       1628   0         39     
        tm4c123gh6pm_startup_ccs.obj   12     620       0      
     +--+------------------------------+------+---------+---------+
-       Total:                         1476   620       39     
+       Total:                         1640   620       39     
+                                                              
+    ./src/
+       lcdDriver.obj                  1236   500       1026   
+    +--+------------------------------+------+---------+---------+
+       Total:                         1236   500       1026   
                                                               
     /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/lib/rtsv7M4_T_le_v4SPD16_eabi.lib
        memcpy_t2.asm.obj              156    0         0      
+       memset_t2.asm.obj              122    0         0      
        copy_decompress_lzss.c.obj     104    0         0      
        autoinit.c.obj                 68     0         0      
        boot_cortex_m.c.obj            56     0         0      
        strlen.c.obj                   20     0         0      
-       copy_zero_init.c.obj           18     0         0      
        copy_decompress_none.c.obj     14     0         0      
+       copy_zero_init.c.obj           12     0         0      
        exit.c.obj                     4      0         0      
        pre_init.c.obj                 4      0         0      
     +--+------------------------------+------+---------+---------+
-       Total:                         444    0         0      
+       Total:                         560    0         0      
                                                               
        Stack:                         0      0         512    
-       Linker Generated:              0      41        0      
+       Linker Generated:              0      43        0      
     +--+------------------------------+------+---------+---------+
-       Grand Total:                   1920   661       551    
+       Grand Total:                   3436   1163      1577   
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 00000a10 records: 2, size/record: 8, table size: 16
-	.bss: load addr=00000a00, load size=00000008 bytes, run addr=20000200, run size=00000026 bytes, compression=zero_init
-	.data: load addr=00000a08, load size=00000005 bytes, run addr=20000226, run size=00000001 bytes, compression=lzss
+__TI_cinit_table @ 000011f0 records: 2, size/record: 8, table size: 16
+	.bss: load addr=000011e0, load size=00000008 bytes, run addr=20000000, run size=00000426 bytes, compression=zero_init
+	.data: load addr=000011e8, load size=00000007 bytes, run addr=20000628, run size=00000003 bytes, compression=lzss
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 000009f0 records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 000011d0 records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_decompress_lzss
 	index: 1, handler: __TI_decompress_none
 	index: 2, handler: __TI_zero_init
@@ -122,57 +137,80 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 
 address   name                          
 -------   ----                          
-000009e9  C$$EXIT                       
-000009d9  ResetISR                      
+00000fd7  C$$EXIT                       
+00000fc7  ResetISR                      
 00000507  SumWords                      
-20000200  __STACK_END                   
+20000628  __STACK_END                   
 00000200  __STACK_SIZE                  
-20000200  __STACK_TOP                   
-00000a10  __TI_CINIT_Base               
-00000a20  __TI_CINIT_Limit              
-000009f0  __TI_Handler_Table_Base       
-000009fc  __TI_Handler_Table_Limit      
-00000929  __TI_auto_init_nobinit_nopinit
-000008c1  __TI_decompress_lzss          
-000009cb  __TI_decompress_none          
+20000628  __STACK_TOP                   
+000011f0  __TI_CINIT_Base               
+00001200  __TI_CINIT_Limit              
+000011d0  __TI_Handler_Table_Base       
+000011dc  __TI_Handler_Table_Limit      
+00000f1d  __TI_auto_init_nobinit_nopinit
+00000eb3  __TI_decompress_lzss          
+00000fad  __TI_decompress_none          
 ffffffff  __TI_pprof_out_hndl           
 ffffffff  __TI_prof_data_size           
 ffffffff  __TI_prof_data_start          
 00000000  __TI_static_base__            
-000009b9  __TI_zero_init_nomemset       
-00000825  __aeabi_memcpy                
-00000825  __aeabi_memcpy4               
-00000825  __aeabi_memcpy8               
+00000fbb  __TI_zero_init                
+00000e39  __aeabi_memclr                
+00000e39  __aeabi_memclr4               
+00000e39  __aeabi_memclr8               
+00000d9d  __aeabi_memcpy                
+00000d9d  __aeabi_memcpy4               
+00000d9d  __aeabi_memcpy8               
+00000e3b  __aeabi_memset                
+00000e3b  __aeabi_memset4               
+00000e3b  __aeabi_memset8               
 ffffffff  __binit__                     
 ffffffff  __c_args__                    
 UNDEFED   __mpu_init                    
-20000000  __stack                       
-0000096d  _c_int00_noargs               
+20000428  __stack                       
+00000f61  _c_int00_noargs               
 UNDEFED   _system_post_cinit            
-000009e5  _system_pre_init              
-000009e9  abort                         
+00000fd3  _system_pre_init              
+00000fd7  abort                         
 ffffffff  binit                         
-20000224  chksum                        
+000007a5  blinkLED                      
+00000fda  charGen                       
+20000424  chksum                        
+000009d7  clearGraphicsLcd              
 00000631  createPacket                  
-20000214  data                          
-20000226  dataLength                    
+20000414  data                          
+2000062a  dataLength                    
+00000a7b  drawGraphicsLcdPixel          
+00000b39  drawGraphicsLcdRectangle      
 00000000  g_pfnVectors                  
 00000579  getChecksum                   
+00000a0d  initGraphicsLcd               
 0000026d  initHw                        
 000004bd  initialize_data               
-000007ad  main                          
-00000825  memcpy                        
-20000200  packet                        
+000007f9  main                          
+00000d9d  memcpy                        
+00000e41  memset                        
+20000400  packet                        
+20000000  pixelMap                      
 00000731  putPacket                     
+00000ce5  putcGraphicsLcd               
 0000046f  putcUart0                     
 00000405  putcUart1                     
 00000421  puthUart1                     
+00000d59  putsGraphicsLcd               
 0000048b  putsUart0                     
 0000043d  putsUart1                     
-000009a5  strlen                        
-20000220  sum                           
+0000096d  refreshGraphicsLcd            
+000008c9  sendGraphicsLcdCommand        
+000008ff  sendGraphicsLcdData           
+0000094b  setGraphicsLcdColumn          
+00000935  setGraphicsLcdPage            
+00000cb3  setGraphicsLcdTextPosition    
+00000f99  strlen                        
+20000420  sum                           
 00000769  timer1ISR                     
 000006f9  trainingPackets               
+20000628  txtIndex                      
 000003e5  waitMicrosecond               
 
 
@@ -197,33 +235,56 @@ address   name
 000006f9  trainingPackets               
 00000731  putPacket                     
 00000769  timer1ISR                     
-000007ad  main                          
-00000825  __aeabi_memcpy                
-00000825  __aeabi_memcpy4               
-00000825  __aeabi_memcpy8               
-00000825  memcpy                        
-000008c1  __TI_decompress_lzss          
-00000929  __TI_auto_init_nobinit_nopinit
-0000096d  _c_int00_noargs               
-000009a5  strlen                        
-000009b9  __TI_zero_init_nomemset       
-000009cb  __TI_decompress_none          
-000009d9  ResetISR                      
-000009e5  _system_pre_init              
-000009e9  C$$EXIT                       
-000009e9  abort                         
-000009f0  __TI_Handler_Table_Base       
-000009fc  __TI_Handler_Table_Limit      
-00000a10  __TI_CINIT_Base               
-00000a20  __TI_CINIT_Limit              
-20000000  __stack                       
-20000200  __STACK_END                   
-20000200  __STACK_TOP                   
-20000200  packet                        
-20000214  data                          
-20000220  sum                           
-20000224  chksum                        
-20000226  dataLength                    
+000007a5  blinkLED                      
+000007f9  main                          
+000008c9  sendGraphicsLcdCommand        
+000008ff  sendGraphicsLcdData           
+00000935  setGraphicsLcdPage            
+0000094b  setGraphicsLcdColumn          
+0000096d  refreshGraphicsLcd            
+000009d7  clearGraphicsLcd              
+00000a0d  initGraphicsLcd               
+00000a7b  drawGraphicsLcdPixel          
+00000b39  drawGraphicsLcdRectangle      
+00000cb3  setGraphicsLcdTextPosition    
+00000ce5  putcGraphicsLcd               
+00000d59  putsGraphicsLcd               
+00000d9d  __aeabi_memcpy                
+00000d9d  __aeabi_memcpy4               
+00000d9d  __aeabi_memcpy8               
+00000d9d  memcpy                        
+00000e39  __aeabi_memclr                
+00000e39  __aeabi_memclr4               
+00000e39  __aeabi_memclr8               
+00000e3b  __aeabi_memset                
+00000e3b  __aeabi_memset4               
+00000e3b  __aeabi_memset8               
+00000e41  memset                        
+00000eb3  __TI_decompress_lzss          
+00000f1d  __TI_auto_init_nobinit_nopinit
+00000f61  _c_int00_noargs               
+00000f99  strlen                        
+00000fad  __TI_decompress_none          
+00000fbb  __TI_zero_init                
+00000fc7  ResetISR                      
+00000fd3  _system_pre_init              
+00000fd7  C$$EXIT                       
+00000fd7  abort                         
+00000fda  charGen                       
+000011d0  __TI_Handler_Table_Base       
+000011dc  __TI_Handler_Table_Limit      
+000011f0  __TI_CINIT_Base               
+00001200  __TI_CINIT_Limit              
+20000000  pixelMap                      
+20000400  packet                        
+20000414  data                          
+20000420  sum                           
+20000424  chksum                        
+20000428  __stack                       
+20000628  __STACK_END                   
+20000628  __STACK_TOP                   
+20000628  txtIndex                      
+2000062a  dataLength                    
 ffffffff  __TI_pprof_out_hndl           
 ffffffff  __TI_prof_data_size           
 ffffffff  __TI_prof_data_start          
@@ -233,4 +294,4 @@ ffffffff  binit
 UNDEFED   __mpu_init                    
 UNDEFED   _system_post_cinit            
 
-[52 symbols]
+[75 symbols]
