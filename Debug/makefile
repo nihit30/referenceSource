@@ -11,6 +11,7 @@ ORDERED_OBJS += \
 "./main.obj" \
 "./tm4c123gh6pm_startup_ccs.obj" \
 "./src/initHw.obj" \
+"./src/lcdDriver.obj" \
 "../tm4c123gh6pm.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibc.a \
@@ -157,8 +158,8 @@ ReferenceSource.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "main.obj" "tm4c123gh6pm_startup_ccs.obj" "src/initHw.obj" 
-	-$(RM) "main.d" "tm4c123gh6pm_startup_ccs.d" "src/initHw.d" 
+	-$(RM) "main.obj" "tm4c123gh6pm_startup_ccs.obj" "src/initHw.obj" "src/lcdDriver.obj" 
+	-$(RM) "main.d" "tm4c123gh6pm_startup_ccs.d" "src/initHw.d" "src/lcdDriver.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

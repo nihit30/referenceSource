@@ -10,6 +10,7 @@ main.obj: /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/ma
 main.obj: /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/sys/_stdint.h
 main.obj: /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdbool.h
 main.obj: ../tm4c123gh6pm.h
+main.obj: ../inc/lcdDriver.h
 main.obj: /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/strings.h
 main.obj: /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/string.h
 main.obj: /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/_ti_config.h
@@ -25,6 +26,7 @@ main.obj: /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/li
 /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/sys/_stdint.h: 
 /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdbool.h: 
 ../tm4c123gh6pm.h: 
+../inc/lcdDriver.h: 
 /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/strings.h: 
 /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/string.h: 
 /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/_ti_config.h: 
