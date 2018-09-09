@@ -1,6 +1,6 @@
-// Reference source is responsible to transmit 'synchronization signal' to beacons and mobile receiver using TXM 418 LR RF modules.
-// TXM 418 LR modules are connected to the controller on UART serial interface.
-// Packet is transmitted every 1sec in while(1) loop
+// Reference source is responsible to transmit 'synchronization signal' to beacons and mobile receiver using RF modules.
+// RF modules are connected to the controller on UART serial interface.
+// Packet is transmitted every 1sec using a timer interrupt
 // Information in packet, byte-wise, starting from 0 is dataLengthgth of packet, 3 beacon's x & y co-ordinates, NULL character, checksum and null again
 // TO DO : Add Z co-ordinate
 // IMPORTANT : LCD + PUSH BUTTONS
@@ -15,26 +15,27 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "tm4c123gh6pm.h"
-#include "inc/lcdDriver.h"
-#include "inc/initHw.h"
+#include "lcdDriver.h"
+#include "initHw.h"
 #include <strings.h>
 
 // Bit banding peripherals
 #define BLUE_LED     (*((volatile uint32_t *)(0x42000000 + (0x400253FC-0x40000000)*32 + 2*4))) // on-board blue LED
 
 // Push button initialization
-#define UP_PB      (*((volatile uint32_t *)(0x42000000 + (0x4005A000-0x40000000)*32 + 6*4))) // port C, pin6
-#define DOWN_PB    (*((volatile uint32_t *)(0x42000000 + (0x4005A000-0x40000000)*32 + 7*4))) // port C, pin7
-#define ENTER_PB   (*((volatile uint32_t *)(0x42000000 + (0x4005B000-0x40000000)*32 + 6*4))) // port D, pin6
+#define UP_PB      (*((volatile uint32_t *)(0x42000000 + (0x400063FC-0x40000000)*32 + 6*4))) // port C, pin6
+#define LEFT_PB    (*((volatile uint32_t *)(0x42000000 + (0x400063FC-0x40000000)*32 + 7*4))) // port C, pin7
+#define RIGHT_PB   (*((volatile uint32_t *)(0x42000000 + (0x400073FC-0x40000000)*32 + 6*4))) // port D, pin6
 
 
 #define X1_COOR 0
-#define X2_COOR 496
-#define X3_COOR 496
 #define Y1_COOR 0
-#define Y2_COOR 0
-#define Y3_COOR 240
 
+#define X2_COOR 496
+#define Y2_COOR 0
+
+#define X3_COOR 496
+#define Y3_COOR 240
 
 
 uint32_t sum;
@@ -42,10 +43,10 @@ uint8_t data[12];
 uint8_t packet[20];
 uint16_t chksum;
 uint8_t dataLength = 11;
+float axis[3]={25.1,2.2,3.3};
+float *locate,value;
 
-
-
-
+uint16_t dec_point[2];
 
 
 void waitMicrosecond(uint32_t us)
@@ -122,6 +123,8 @@ void initialize_data()
     data[11] = (Y3_COOR & 0x00FF) + 1;
 
 }
+
+
 
 
 void SumWords(void* data, uint16_t size_in_bytes)
@@ -211,7 +214,7 @@ void putPacket()
 void transmitPacketISR()
 {
 
-            BLUE_LED ^= 1;
+           // BLUE_LED ^= 1;
             trainingPackets(4);
             puthUart1(0x41);
             puthUart1(0x42);
@@ -231,19 +234,99 @@ void blinkLED()
 
 bool buttonPress()
 {
-    return (UP_PB | DOWN_PB | ENTER_PB);
+    return (UP_PB | RIGHT_PB | LEFT_PB);
 }
+
+void digitset()
+{
+    uint16_t dec_point[3], temp, *curser_ptr,curser_ptr_value=0;
+    float *locate_float, fvalue, value2;
+
+    curser_ptr = &dec_point[0];
+
+    locate_float = &axis[0];
+
+
+        fvalue = *locate_float;
+        temp = fvalue;
+          if (temp / 10 >= 1)
+        {
+
+          value2 = (fvalue - temp) * 10;
+          dec_point[0] = temp / 10;  // in 32.1 contain 3
+          dec_point[1] = temp % 10;  // in 32.1 contain 2
+          dec_point[2] = value2;     // in 32.1 contain 1
+        }
+          else
+          {
+              value2 = (fvalue - temp) * 10;
+              dec_point[0] = 0 ;
+              dec_point[1] = temp;
+              dec_point[2] = value2;
+              curser_ptr++;
+          }
+
+
+        while(!(RIGHT_PB == 0 && LEFT_PB ==0 ))
+        {
+
+         if (RIGHT_PB == 0 && curser_ptr_value<=2)
+          {
+            curser_ptr_value++;
+            curser_ptr++;
+          }
+         if (LEFT_PB == 0 && curser_ptr_value>0)
+         {
+            curser_ptr_value--;
+            curser_ptr--;
+         }
+         if (UP_PB == 0)
+         {
+           *curser_ptr = *curser_ptr+1;
+           if(*curser_ptr >= 10)
+                  *curser_ptr=0;
+         }
+
+
+         BLUE_LED=1;
+
+        }
+          axis[0]=dec_point[0]*10+dec_point[1]+(0.1*dec_point[2]);
+
+
+
+}
+
+void portAisr()
+{
+    BLUE_LED = 1;
+
+    GPIO_PORTA_ICR_R = 0x0C;
+
+}
+
+void portFisr()
+{
+
+        BLUE_LED = 0;
+
+        GPIO_PORTF_ICR_R = 0x10;
+}
+
+
 
 int main(void)
 {
 
     initHw();
     blinkLED();
+
+
     initGraphicsLcd();
     createPacket(&data, dataLength);
-    UP_PB = 1;
-    DOWN_PB = 1;
-    ENTER_PB = 1;
+
+
+
 
     // Draw X in left half of screen
    // uint8_t i;
@@ -252,16 +335,23 @@ int main(void)
    // for (i = 0; i < 64; i++)
    //     drawGraphicsLcdPixel(63 - i, i, INVERT);
 
-    // Draw text on screen
+  // Draw text on screen
   //  setGraphicsLcdTextPosition(84, 5);
   //  putsGraphicsLcd("Text");
 
-    TIMER1_IMR_R = TIMER_IMR_TATOIM;                 // turn-on interrupts
+  //  TIMER1_IMR_R = TIMER_IMR_TATOIM;                 // turn-on interrupts
 
     while (1)
     {
         //drawGraphicsLcdRectangle(83, 39, 25, 9, INVERT);
-        //waitMicrosecond(500000);
+
+
+           // UP_PB = 1;
+            //LEFT_PB = 1;
+            //RIGHT_PB = 1;
+           // digitset();
+
+
 
 
 

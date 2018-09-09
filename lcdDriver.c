@@ -1,6 +1,6 @@
 
 #include <stdint.h>
-#include "inc/lcdDriver.h"
+#include "lcdDriver.h"
 #include "tm4c123gh6pm.h"
 
 uint8_t  pixelMap[1024];
@@ -127,7 +127,7 @@ void sendGraphicsLcdCommand(uint8_t command)
     __asm (" NOP");
     __asm (" NOP");
     __asm (" NOP");
-    A0 = 0;                            // clear A0 for commands
+    A0 = 0;                            // clear A0 for commands, A0 is a GPIO on controller
     SSI2_DR_R = command;               // write command
     while (SSI2_SR_R & SSI_SR_BSY);
     CS_NOT = 1;                        // de-assert chip select

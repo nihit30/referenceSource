@@ -8,10 +8,10 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
+"./initHw.obj" \
+"./lcdDriver.obj" \
 "./main.obj" \
 "./tm4c123gh6pm_startup_ccs.obj" \
-"./src/initHw.obj" \
-"./src/lcdDriver.obj" \
 "../tm4c123gh6pm.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibc.a \
@@ -25,9 +25,7 @@ RMDIR := rm -rf
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir_vars.mk
--include src/subdir_vars.mk
 -include subdir_rules.mk
--include src/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -158,8 +156,8 @@ ReferenceSource.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "main.obj" "tm4c123gh6pm_startup_ccs.obj" "src/initHw.obj" "src/lcdDriver.obj" 
-	-$(RM) "main.d" "tm4c123gh6pm_startup_ccs.d" "src/initHw.d" "src/lcdDriver.d" 
+	-$(RM) "initHw.obj" "lcdDriver.obj" "main.obj" "tm4c123gh6pm_startup_ccs.obj" 
+	-$(RM) "initHw.d" "lcdDriver.d" "main.d" "tm4c123gh6pm_startup_ccs.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

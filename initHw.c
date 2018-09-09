@@ -1,15 +1,13 @@
-/*
- * initHw.c
- *
- *  Created on: Aug 24, 2018
- *      Author: nihit
- */
+
 
 #include <stdint.h>
+#include <stdbool.h>
 #include "tm4c123gh6pm.h"
-#include "inc/initHw.h"
+#include "driverlib/gpio.h"
+#include "driverlib/interrupt.h"
+#include "initHw.h"
 
-// PC6, PC7, PD6
+// PF4, PA2, PA3
 
 void initHw()
 {
@@ -31,17 +29,24 @@ void initHw()
     GPIO_PORTF_DR2R_R = 0x04; // set drive strength to 2mA (not needed since default configuration -- for clarity)
     GPIO_PORTF_DEN_R = 0x04;  // enable bit 2
 
+    // 1 Push button on PF4, 0x10
     // Configure port C for external push buttons
-   GPIO_PORTC_DIR_R = 0x00;  // pc6 and pc7 as inputs for ext pb
-   GPIO_PORTC_DR2R_R = 0xC0; // set drive strength to 2mA
-   GPIO_PORTC_DEN_R = 0xC0;  // enable data on pc6 and pc7
-   GPIO_PORTC_PUR_R = 0xC0;  // Enable internal pull-ups
+    // Configure LED and pushbutton pins
+    GPIO_PORTF_DEN_R = 0x1A;  // enable LEDs and pushbuttons
+    GPIO_PORTF_PUR_R = 0x10;  // enable internal pull-up for push button
+    //GPIOPinTypeGPIOInput(0x40025000, GPIO_PIN_4);
+    GPIOIntTypeSet(0x40025000, GPIO_PIN_4, GPIO_FALLING_EDGE);
+    GPIOIntEnable (0x40025000, GPIO_PIN_4);
+    IntEnable(INT_GPIOF);
 
-   // Configure port D for ext push button
-    GPIO_PORTD_DIR_R = 0x00;  // pc6 and pc7 as inputs for ext pb
-    GPIO_PORTD_DR2R_R = 0x40; // set drive strength to 2mA
-    GPIO_PORTD_DEN_R = 0x40;  // enable data on pc6 and pc7
-    GPIO_PORTD_PUR_R = 0x40;  // Enable internal pull-ups
+    // 2 push buttons on PA2 and PA3, 0x0C
+    // Configure port D for ext push button
+    GPIO_PORTA_DEN_R = 0x0C;  // enable data on pc6 and pc7
+    GPIO_PORTA_PUR_R = 0x0C;  // Enable internal pull-ups
+    //GPIOPinTypeGPIOInput(0x40004000, GPIO_PIN_2 | GPIO_PIN_3);
+    GPIOIntTypeSet(0x40004000 , GPIO_PIN_2 | GPIO_PIN_3, GPIO_FALLING_EDGE);
+    GPIOIntEnable(0x40004000, GPIO_PIN_2 | GPIO_PIN_3);
+    IntEnable(INT_GPIOA);
 
     // LCD SECTION
     // Configure three backlight LEDs for LCD
@@ -102,6 +107,18 @@ void initHw()
     TIMER1_TAILR_R = 0x04C4B400;
     NVIC_EN0_R |= 1 << (INT_TIMER1A - 16);     // turn-on interrupt 37 (TIMER1A)
     TIMER1_CTL_R |= TIMER_CTL_TAEN;                  // turn-on timer
+
+    SYSCTL_RCGCPWM_R |= SYSCTL_RCGCPWM_R0;
+    GPIO_PORTB_DEN_R |= 0xC0;
+    GPIO_PORTB_AFSEL_R |= 0xC0;
+    GPIO_PORTB_PCTL_R = GPIO_PCTL_PB6_M0PWM0;
+
+    PWM0_0_CTL_R = 0;
+    PWM0_0_GENA_R = PWM_0_GENA_ACTCMPAD_ZERO | PWM_0_GENA_ACTLOAD_M;
+    PWM0_0_LOAD_R = 0x674;
+    PWM0_0_CMPA_R = 0x33A;
+    PWM0_0_CTL_R |= 1;
+    PWM0_ENABLE_R |= PWM_ENABLE_PWM0EN;
 
 
 }
