@@ -1,33 +1,33 @@
 ******************************************************************************
                   TI ARM Linker Unix v18.1.1                   
 ******************************************************************************
->> Linked Sun Sep  9 17:48:01 2018
+>> Linked Sun Sep  9 18:46:43 2018
 
 OUTPUT FILE NAME:   <ReferenceSource.out>
-ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 0000154d
+ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00001601
 
 
 MEMORY CONFIGURATION
 
          name            origin    length      used     unused   attr    fill
 ----------------------  --------  ---------  --------  --------  ----  --------
-  FLASH                 00000000   00040000  000018bc  0003e744  R  X
-  SRAM                  20000000   00008000  00000635  000079cb  RW X
+  FLASH                 00000000   00040000  00001986  0003e67a  R  X
+  SRAM                  20000000   00008000  00000638  000079c8  RW X
 
 
 SEGMENT ALLOCATION MAP
 
 run origin  load origin   length   init length attrs members
 ----------  ----------- ---------- ----------- ----- -------
-00000000    00000000    000018c0   000018c0    r-x
+00000000    00000000    00001988   00001988    r-x
   00000000    00000000    0000026c   0000026c    r-- .intvecs
-  0000026c    0000026c    000013b4   000013b4    r-x .text
-  00001620    00001620    00000264   00000264    r-- .const
-  00001888    00001888    00000038   00000038    r-- .cinit
-20000000    20000000    00000637   00000000    rw-
+  0000026c    0000026c    00001476   00001476    r-x .text
+  000016e4    000016e4    00000264   00000264    r-- .const
+  00001948    00001948    00000040   00000040    r-- .cinit
+20000000    20000000    0000063a   00000000    rw-
   20000000    20000000    00000426   00000000    rw- .bss
   20000428    20000428    00000200   00000000    rw- .stack
-  20000628    20000628    0000000f   00000000    rw- .data
+  20000628    20000628    00000012   00000000    rw- .data
 
 
 SECTION ALLOCATION MAP
@@ -38,41 +38,43 @@ section   page    origin      length       input sections
 .intvecs   0    00000000    0000026c     
                   00000000    0000026c     tm4c123gh6pm_startup_ccs.obj (.intvecs)
 
-.text      0    0000026c    000013b4     
-                  0000026c    0000058c     main.obj (.text)
-                  000007f8    000004d4     lcdDriver.obj (.text)
-                  00000ccc    000002dc     initHw.obj (.text)
-                  00000fa8    000001b6     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_add_t2.asm.obj (.text)
-                  0000115e    000000fc                                   : fd_mul_t2.asm.obj (.text)
-                  0000125a    0000009c                                   : memcpy_t2.asm.obj (.text)
-                  000012f6    0000007a                                   : memset_t2.asm.obj (.text)
-                  00001370    0000006e                                   : fd_tos_t2.asm.obj (.text)
-                  000013de    00000002     --HOLE-- [fill = 0]
-                  000013e0    00000068     driverlib.lib : interrupt.obj (.text:IntEnable)
-                  00001448    00000068     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
-                  000014b0    00000056     driverlib.lib : gpio.obj (.text:GPIOIntTypeSet)
-                  00001506    00000002     --HOLE-- [fill = 0]
-                  00001508    00000044     rtsv7M4_T_le_v4SPD16_eabi.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit:__TI_auto_init_nobinit_nopinit)
-                  0000154c    00000038                                   : boot_cortex_m.c.obj (.text:_c_int00_noargs:_c_int00_noargs)
-                  00001584    0000002e                                   : i_tofd_t2.asm.obj (.text)
-                  000015b2    00000020                                   : u_tofd_t2.asm.obj (.text)
-                  000015d2    00000014                                   : strlen.c.obj (.text:strlen)
-                  000015e6    0000000e                                   : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
-                  000015f4    0000000c     driverlib.lib : gpio.obj (.text:GPIOIntEnable)
-                  00001600    0000000c     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init)
-                  0000160c    0000000c     tm4c123gh6pm_startup_ccs.obj (.text)
-                  00001618    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
-                  0000161c    00000004                                   : exit.c.obj (.text:abort:abort)
+.text      0    0000026c    00001476     
+                  0000026c    00000630     main.obj (.text)
+                  0000089c    000004d4     lcdDriver.obj (.text)
+                  00000d70    000002ec     initHw.obj (.text)
+                  0000105c    000001b6     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_add_t2.asm.obj (.text)
+                  00001212    000000fc                                   : fd_mul_t2.asm.obj (.text)
+                  0000130e    0000009c                                   : memcpy_t2.asm.obj (.text)
+                  000013aa    0000007a                                   : memset_t2.asm.obj (.text)
+                  00001424    0000006e                                   : fd_tos_t2.asm.obj (.text)
+                  00001492    00000002     --HOLE-- [fill = 0]
+                  00001494    00000068     driverlib.lib : interrupt.obj (.text:IntEnable)
+                  000014fc    00000068     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
+                  00001564    00000056     driverlib.lib : gpio.obj (.text:GPIOIntTypeSet)
+                  000015ba    00000002     --HOLE-- [fill = 0]
+                  000015bc    00000044     rtsv7M4_T_le_v4SPD16_eabi.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit:__TI_auto_init_nobinit_nopinit)
+                  00001600    00000038                                   : boot_cortex_m.c.obj (.text:_c_int00_noargs:_c_int00_noargs)
+                  00001638    0000002e                                   : i_tofd_t2.asm.obj (.text)
+                  00001666    00000020                                   : u_tofd_t2.asm.obj (.text)
+                  00001686    00000014                                   : strlen.c.obj (.text:strlen)
+                  0000169a    0000000e     driverlib.lib : gpio.obj (.text:GPIOIntDisable)
+                  000016a8    0000000e     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
+                  000016b6    0000000c     driverlib.lib : gpio.obj (.text:GPIOIntEnable)
+                  000016c2    0000000c     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init)
+                  000016ce    0000000c     tm4c123gh6pm_startup_ccs.obj (.text)
+                  000016da    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
+                  000016de    00000004                                   : exit.c.obj (.text:abort:abort)
 
-.const     0    00001620    00000264     
-                  00001620    000001f4     lcdDriver.obj (.const:charGen)
-                  00001814    00000070     driverlib.lib : interrupt.obj (.const)
+.const     0    000016e4    00000264     
+                  000016e4    000001f4     lcdDriver.obj (.const:charGen)
+                  000018d8    00000070     driverlib.lib : interrupt.obj (.const)
 
-.cinit     0    00001888    00000038     
-                  00001888    00000014     (.cinit..data.load) [load image, compression = lzss]
-                  0000189c    0000000c     (__TI_handler_table)
-                  000018a8    00000008     (.cinit..bss.load) [load image, compression = zero_init]
-                  000018b0    00000010     (__TI_cinit_table)
+.cinit     0    00001948    00000040     
+                  00001948    00000018     (.cinit..data.load) [load image, compression = lzss]
+                  00001960    0000000c     (__TI_handler_table)
+                  0000196c    00000004     --HOLE-- [fill = 0]
+                  00001970    00000008     (.cinit..bss.load) [load image, compression = zero_init]
+                  00001978    00000010     (__TI_cinit_table)
 
 .init_array 
 *          0    00000000    00000000     UNINITIALIZED
@@ -84,10 +86,10 @@ section   page    origin      length       input sections
                   20000420    00000004     (.common:sum)
                   20000424    00000002     (.common:chksum)
 
-.data      0    20000628    0000000f     UNINITIALIZED
+.data      0    20000628    00000012     UNINITIALIZED
                   20000628    0000000c     main.obj (.data:axis)
-                  20000634    00000002     lcdDriver.obj (.data)
-                  20000636    00000001     main.obj (.data)
+                  20000634    00000004     main.obj (.data)
+                  20000638    00000002     lcdDriver.obj (.data)
 
 .stack     0    20000428    00000200     UNINITIALIZED
                   20000428    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : boot_cortex_m.c.obj (.stack)
@@ -99,11 +101,11 @@ MODULE SUMMARY
        ------                         ----   -------   -------
     ./
        lcdDriver.obj                  1236   500       1026   
-       main.obj                       1420   0         51     
-       initHw.obj                     732    0         0      
+       main.obj                       1584   0         54     
+       initHw.obj                     748    0         0      
        tm4c123gh6pm_startup_ccs.obj   12     620       0      
     +--+------------------------------+------+---------+---------+
-       Total:                         3400   1120      1077   
+       Total:                         3580   1120      1080   
                                                               
     /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/lib/rtsv7M4_T_le_v4SPD16_eabi.lib
        fd_add_t2.asm.obj              438    0         0      
@@ -126,26 +128,26 @@ MODULE SUMMARY
                                                               
     /Users/nihit/Desktop/TivaWare_C_Series-2.1.4.178/driverlib/ccs/Debug/driverlib.lib
        interrupt.obj                  104    112       0      
-       gpio.obj                       98     0         0      
+       gpio.obj                       112    0         0      
     +--+------------------------------+------+---------+---------+
-       Total:                         202    112       0      
+       Total:                         216    112       0      
                                                               
        Stack:                         0      0         512    
-       Linker Generated:              0      56        0      
+       Linker Generated:              0      60        0      
     +--+------------------------------+------+---------+---------+
-       Grand Total:                   5040   1288      1589   
+       Grand Total:                   5234   1292      1592   
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 000018b0 records: 2, size/record: 8, table size: 16
-	.data: load addr=00001888, load size=00000014 bytes, run addr=20000628, run size=0000000f bytes, compression=lzss
-	.bss: load addr=000018a8, load size=00000008 bytes, run addr=20000000, run size=00000426 bytes, compression=zero_init
+__TI_cinit_table @ 00001978 records: 2, size/record: 8, table size: 16
+	.data: load addr=00001948, load size=00000018 bytes, run addr=20000628, run size=00000012 bytes, compression=lzss
+	.bss: load addr=00001970, load size=00000008 bytes, run addr=20000000, run size=00000426 bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 0000189c records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 00001960 records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_decompress_lzss
 	index: 1, handler: __TI_decompress_none
 	index: 2, handler: __TI_zero_init
@@ -155,95 +157,99 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 
 address   name                          
 -------   ----                          
-0000161d  C$$EXIT                       
-000015f5  GPIOIntEnable                 
-000014b1  GPIOIntTypeSet                
-000013e1  IntEnable                     
-0000160d  ResetISR                      
+000016df  C$$EXIT                       
+0000169b  GPIOIntDisable                
+000016b7  GPIOIntEnable                 
+00001565  GPIOIntTypeSet                
+00001495  IntEnable                     
+000016cf  ResetISR                      
 0000038f  SumWords                      
 20000628  __STACK_END                   
 00000200  __STACK_SIZE                  
 20000628  __STACK_TOP                   
-000018b0  __TI_CINIT_Base               
-000018c0  __TI_CINIT_Limit              
-0000189c  __TI_Handler_Table_Base       
-000018a8  __TI_Handler_Table_Limit      
-00001509  __TI_auto_init_nobinit_nopinit
-00001449  __TI_decompress_lzss          
-000015e7  __TI_decompress_none          
+00001978  __TI_CINIT_Base               
+00001988  __TI_CINIT_Limit              
+00001960  __TI_Handler_Table_Base       
+0000196c  __TI_Handler_Table_Limit      
+000015bd  __TI_auto_init_nobinit_nopinit
+000014fd  __TI_decompress_lzss          
+000016a9  __TI_decompress_none          
 ffffffff  __TI_pprof_out_hndl           
 ffffffff  __TI_prof_data_size           
 ffffffff  __TI_prof_data_start          
 00000000  __TI_static_base__            
-00001601  __TI_zero_init                
-00001371  __aeabi_d2f                   
-00000fb3  __aeabi_dadd                  
-0000115f  __aeabi_dmul                  
-00000fa9  __aeabi_dsub                  
-00001585  __aeabi_i2d                   
-000012f7  __aeabi_memclr                
-000012f7  __aeabi_memclr4               
-000012f7  __aeabi_memclr8               
-0000125b  __aeabi_memcpy                
-0000125b  __aeabi_memcpy4               
-0000125b  __aeabi_memcpy8               
-000012f9  __aeabi_memset                
-000012f9  __aeabi_memset4               
-000012f9  __aeabi_memset8               
-000015b3  __aeabi_ui2d                  
+000016c3  __TI_zero_init                
+00001425  __aeabi_d2f                   
+00001067  __aeabi_dadd                  
+00001213  __aeabi_dmul                  
+0000105d  __aeabi_dsub                  
+00001639  __aeabi_i2d                   
+000013ab  __aeabi_memclr                
+000013ab  __aeabi_memclr4               
+000013ab  __aeabi_memclr8               
+0000130f  __aeabi_memcpy                
+0000130f  __aeabi_memcpy4               
+0000130f  __aeabi_memcpy8               
+000013ad  __aeabi_memset                
+000013ad  __aeabi_memset4               
+000013ad  __aeabi_memset8               
+00001667  __aeabi_ui2d                  
 ffffffff  __binit__                     
 ffffffff  __c_args__                    
 UNDEFED   __mpu_init                    
 20000428  __stack                       
-0000154d  _c_int00_noargs               
+00001601  _c_int00_noargs               
 UNDEFED   _system_post_cinit            
-00001619  _system_pre_init              
-0000161d  abort                         
+000016db  _system_pre_init              
+000016df  abort                         
 20000628  axis                          
 ffffffff  binit                         
 00000581  blinkLED                      
-00000599  buttonPress                   
-00001620  charGen                       
+000005af  buttonPress                   
+000016e4  charGen                       
 20000424  chksum                        
-00000907  clearGraphicsLcd              
+000009ab  clearGraphicsLcd              
 0000043b  createPacket                  
 20000414  data                          
-20000636  dataLength                    
+20000637  dataLength                    
 00000519  debounceISR                   
-000005f9  digitset                      
-000009ab  drawGraphicsLcdPixel          
-00000a69  drawGraphicsLcdRectangle      
+000005f5  digitset                      
+00000a4f  drawGraphicsLcdPixel          
+00000b0d  drawGraphicsLcdRectangle      
+20000636  enterPressed                  
 00000000  g_pfnVectors                  
 00000401  getChecksum                   
-0000093d  initGraphicsLcd               
-00000ccd  initHw                        
+000009e1  initGraphicsLcd               
+00000d71  initHw                        
 00000345  initialize_data               
-000007a5  main                          
-0000125b  memcpy                        
-000012ff  memset                        
+20000634  leftPbPressed                 
+000007cd  main                          
+0000130f  memcpy                        
+000013b3  memset                        
 20000400  packet                        
 20000000  pixelMap                      
-00000783  portAisr                      
-00000791  portFisr                      
+00000779  portAisr                      
+000007a9  portFisr                      
 0000051b  putPacket                     
-00000c15  putcGraphicsLcd               
+00000cb9  putcGraphicsLcd               
 000002f7  putcUart0                     
 0000028d  putcUart1                     
 000002a9  puthUart1                     
-00000c89  putsGraphicsLcd               
+00000d2d  putsGraphicsLcd               
 00000313  putsUart0                     
 000002c5  putsUart1                     
-0000089d  refreshGraphicsLcd            
-000007f9  sendGraphicsLcdCommand        
-0000082f  sendGraphicsLcdData           
-0000087b  setGraphicsLcdColumn          
-00000865  setGraphicsLcdPage            
-00000be3  setGraphicsLcdTextPosition    
-000015d3  strlen                        
+00000941  refreshGraphicsLcd            
+20000635  rightPbPressed                
+0000089d  sendGraphicsLcdCommand        
+000008d3  sendGraphicsLcdData           
+0000091f  setGraphicsLcdColumn          
+00000909  setGraphicsLcdPage            
+00000c87  setGraphicsLcdTextPosition    
+00001687  strlen                        
 20000420  sum                           
 000004e7  trainingPackets               
 0000054f  transmitPacketISR             
-20000634  txtIndex                      
+20000638  txtIndex                      
 0000026d  waitMicrosecond               
 
 
@@ -269,59 +275,60 @@ address   name
 0000051b  putPacket                     
 0000054f  transmitPacketISR             
 00000581  blinkLED                      
-00000599  buttonPress                   
-000005f9  digitset                      
-00000783  portAisr                      
-00000791  portFisr                      
-000007a5  main                          
-000007f9  sendGraphicsLcdCommand        
-0000082f  sendGraphicsLcdData           
-00000865  setGraphicsLcdPage            
-0000087b  setGraphicsLcdColumn          
-0000089d  refreshGraphicsLcd            
-00000907  clearGraphicsLcd              
-0000093d  initGraphicsLcd               
-000009ab  drawGraphicsLcdPixel          
-00000a69  drawGraphicsLcdRectangle      
-00000be3  setGraphicsLcdTextPosition    
-00000c15  putcGraphicsLcd               
-00000c89  putsGraphicsLcd               
-00000ccd  initHw                        
-00000fa9  __aeabi_dsub                  
-00000fb3  __aeabi_dadd                  
-0000115f  __aeabi_dmul                  
-0000125b  __aeabi_memcpy                
-0000125b  __aeabi_memcpy4               
-0000125b  __aeabi_memcpy8               
-0000125b  memcpy                        
-000012f7  __aeabi_memclr                
-000012f7  __aeabi_memclr4               
-000012f7  __aeabi_memclr8               
-000012f9  __aeabi_memset                
-000012f9  __aeabi_memset4               
-000012f9  __aeabi_memset8               
-000012ff  memset                        
-00001371  __aeabi_d2f                   
-000013e1  IntEnable                     
-00001449  __TI_decompress_lzss          
-000014b1  GPIOIntTypeSet                
-00001509  __TI_auto_init_nobinit_nopinit
-0000154d  _c_int00_noargs               
-00001585  __aeabi_i2d                   
-000015b3  __aeabi_ui2d                  
-000015d3  strlen                        
-000015e7  __TI_decompress_none          
-000015f5  GPIOIntEnable                 
-00001601  __TI_zero_init                
-0000160d  ResetISR                      
-00001619  _system_pre_init              
-0000161d  C$$EXIT                       
-0000161d  abort                         
-00001620  charGen                       
-0000189c  __TI_Handler_Table_Base       
-000018a8  __TI_Handler_Table_Limit      
-000018b0  __TI_CINIT_Base               
-000018c0  __TI_CINIT_Limit              
+000005af  buttonPress                   
+000005f5  digitset                      
+00000779  portAisr                      
+000007a9  portFisr                      
+000007cd  main                          
+0000089d  sendGraphicsLcdCommand        
+000008d3  sendGraphicsLcdData           
+00000909  setGraphicsLcdPage            
+0000091f  setGraphicsLcdColumn          
+00000941  refreshGraphicsLcd            
+000009ab  clearGraphicsLcd              
+000009e1  initGraphicsLcd               
+00000a4f  drawGraphicsLcdPixel          
+00000b0d  drawGraphicsLcdRectangle      
+00000c87  setGraphicsLcdTextPosition    
+00000cb9  putcGraphicsLcd               
+00000d2d  putsGraphicsLcd               
+00000d71  initHw                        
+0000105d  __aeabi_dsub                  
+00001067  __aeabi_dadd                  
+00001213  __aeabi_dmul                  
+0000130f  __aeabi_memcpy                
+0000130f  __aeabi_memcpy4               
+0000130f  __aeabi_memcpy8               
+0000130f  memcpy                        
+000013ab  __aeabi_memclr                
+000013ab  __aeabi_memclr4               
+000013ab  __aeabi_memclr8               
+000013ad  __aeabi_memset                
+000013ad  __aeabi_memset4               
+000013ad  __aeabi_memset8               
+000013b3  memset                        
+00001425  __aeabi_d2f                   
+00001495  IntEnable                     
+000014fd  __TI_decompress_lzss          
+00001565  GPIOIntTypeSet                
+000015bd  __TI_auto_init_nobinit_nopinit
+00001601  _c_int00_noargs               
+00001639  __aeabi_i2d                   
+00001667  __aeabi_ui2d                  
+00001687  strlen                        
+0000169b  GPIOIntDisable                
+000016a9  __TI_decompress_none          
+000016b7  GPIOIntEnable                 
+000016c3  __TI_zero_init                
+000016cf  ResetISR                      
+000016db  _system_pre_init              
+000016df  C$$EXIT                       
+000016df  abort                         
+000016e4  charGen                       
+00001960  __TI_Handler_Table_Base       
+0000196c  __TI_Handler_Table_Limit      
+00001978  __TI_CINIT_Base               
+00001988  __TI_CINIT_Limit              
 20000000  pixelMap                      
 20000400  packet                        
 20000414  data                          
@@ -331,8 +338,11 @@ address   name
 20000628  __STACK_END                   
 20000628  __STACK_TOP                   
 20000628  axis                          
-20000634  txtIndex                      
-20000636  dataLength                    
+20000634  leftPbPressed                 
+20000635  rightPbPressed                
+20000636  enterPressed                  
+20000637  dataLength                    
+20000638  txtIndex                      
 ffffffff  __TI_pprof_out_hndl           
 ffffffff  __TI_prof_data_size           
 ffffffff  __TI_prof_data_start          
@@ -342,4 +352,4 @@ ffffffff  binit
 UNDEFED   __mpu_init                    
 UNDEFED   _system_post_cinit            
 
-[90 symbols]
+[94 symbols]

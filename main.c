@@ -14,18 +14,29 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <strings.h>
 #include "tm4c123gh6pm.h"
 #include "lcdDriver.h"
 #include "initHw.h"
-#include <strings.h>
+#include "driverlib/gpio.h"
+
+
+bool leftPbPressed = false;
+bool rightPbPressed = false;
+bool enterPressed = false;
 
 // Bit banding peripherals
 #define BLUE_LED     (*((volatile uint32_t *)(0x42000000 + (0x400253FC-0x40000000)*32 + 2*4))) // on-board blue LED
+#define RED_LED      (*((volatile uint32_t *)(0x42000000 + (0x400253FC-0x40000000)*32 + 1*4)))
+#define GREEN_LED    (*((volatile uint32_t *)(0x42000000 + (0x400253FC-0x40000000)*32 + 3*4)))
+
+#define PORTF_BASE_ADDR 0x400253FC
+#define PORTA_BASE_ADDR 0x400043FC
 
 // Push button initialization
-#define UP_PB      (*((volatile uint32_t *)(0x42000000 + (0x400063FC-0x40000000)*32 + 6*4))) // port C, pin6
-#define LEFT_PB    (*((volatile uint32_t *)(0x42000000 + (0x400063FC-0x40000000)*32 + 7*4))) // port C, pin7
-#define RIGHT_PB   (*((volatile uint32_t *)(0x42000000 + (0x400073FC-0x40000000)*32 + 6*4))) // port D, pin6
+#define RIGHT_PB      (*((volatile uint32_t *)(0x42000000 + (0x400043FC-0x40000000)*32 + 2*4))) // PA2
+#define LEFT_PB    (*((volatile uint32_t *)(0x42000000 + (0x400043FC-0x40000000)*32 + 2*4))) // PA3
+#define ENTER_PB   (*((volatile uint32_t *)(0x42000000 + (0x400253FC-0x40000000)*32 + 4*4))) // PF4
 
 
 #define X1_COOR 0
@@ -227,14 +238,18 @@ void transmitPacketISR()
 
 void blinkLED()
 {
+    RED_LED = 1;
+    GREEN_LED = 1;
     BLUE_LED = 1;
-    waitMicrosecond(5000);
+    waitMicrosecond(500000);
     BLUE_LED = 0;
+    GREEN_LED = 0;
+    RED_LED = 0;
 }
 
 bool buttonPress()
 {
-    return (UP_PB | RIGHT_PB | LEFT_PB);
+   // return (UP_PB | RIGHT_PB | LEFT_PB);
 }
 
 void digitset()
@@ -280,7 +295,7 @@ void digitset()
             curser_ptr_value--;
             curser_ptr--;
          }
-         if (UP_PB == 0)
+         //if (UP_PB == 0)
          {
            *curser_ptr = *curser_ptr+1;
            if(*curser_ptr >= 10)
@@ -299,18 +314,58 @@ void digitset()
 
 void portAisr()
 {
-    BLUE_LED = 1;
 
-    GPIO_PORTA_ICR_R = 0x0C;
+   /* if(!LEFT_PB)
+    {
+        leftPbPressed = true;
+        //GPIOIntDisable(PORTA_BASE_ADDR, GPIO_INT_PIN_3);
+        GPIO_PORTA_IM_R = 0x04;
+    }
 
+    if(!RIGHT_PB)
+       {
+           rightPbPressed = true;
+           GPIO_PORTA_IM_R = 0x80;
+           //GPIOIntDisable(PORTA_BASE_ADDR, GPIO_INT_PIN_2);
+       } */
+
+    switch(GPIO_PORTA_RIS_R)
+    {
+    case 0x00000004 :
+    {
+        leftPbPressed = true;
+        break;
+    }
+
+    case 0x00000008 :
+    {
+
+        rightPbPressed = true;
+        break;
+    }
+
+    default :
+    {
+        break;
+    }
+
+    }
+
+    GPIO_PORTA_ICR_R = 0x0C; // 0x0C
+   // GPIOIntDisable(PORTA_BASE_ADDR, GPIO_INT_PIN_2 | GPIO_INT_PIN_3);
 }
 
 void portFisr()
 {
 
-        BLUE_LED = 0;
+    if(!ENTER_PB)
+    {
+        enterPressed = true;
+        GPIOIntDisable(PORTF_BASE_ADDR, GPIO_INT_PIN_4);
+    }
 
-        GPIO_PORTF_ICR_R = 0x10;
+        GPIO_PORTF_ICR_R = 0x10; // 0x10
+
 }
 
 
@@ -345,11 +400,33 @@ int main(void)
     {
         //drawGraphicsLcdRectangle(83, 39, 25, 9, INVERT);
 
+        if(leftPbPressed)
+        {
+            leftPbPressed = false;
+            RED_LED ^= 1;
+            GPIOIntEnable(PORTA_BASE_ADDR, GPIO_INT_PIN_3);
+            //GPIO_PORTA_IM_R = 0x08;
 
-           // UP_PB = 1;
-            //LEFT_PB = 1;
-            //RIGHT_PB = 1;
-           // digitset();
+
+        }
+
+        if(rightPbPressed)
+        {
+            rightPbPressed = false;
+            GREEN_LED ^= 1;
+            GPIOIntEnable(PORTA_BASE_ADDR, GPIO_INT_PIN_2);
+           // GPIO_PORTA_IM_R = 0x04;
+
+        }
+
+        if(enterPressed)
+        {
+            enterPressed = false;
+            GREEN_LED ^= 1;
+            RED_LED ^= 1;
+            //GPIO_PORTF_IM_R = 0x10;
+            GPIOIntEnable(PORTF_BASE_ADDR, GPIO_INT_PIN_4);
+        }
 
 
 

@@ -32,9 +32,9 @@ void initHw()
     // 1 Push button on PF4, 0x10
     // Configure port C for external push buttons
     // Configure LED and pushbutton pins
-    GPIO_PORTF_DEN_R = 0x1A;  // enable LEDs and pushbuttons
-    GPIO_PORTF_PUR_R = 0x10;  // enable internal pull-up for push button
-    //GPIOPinTypeGPIOInput(0x40025000, GPIO_PIN_4);
+    GPIO_PORTF_DIR_R = 0x0A;
+    GPIO_PORTF_DEN_R |= 0x1A;  // enable LEDs and pushbuttons
+    GPIO_PORTF_PUR_R |= 0x10;  // enable internal pull-up for push button
     GPIOIntTypeSet(0x40025000, GPIO_PIN_4, GPIO_FALLING_EDGE);
     GPIOIntEnable (0x40025000, GPIO_PIN_4);
     IntEnable(INT_GPIOF);
@@ -43,7 +43,6 @@ void initHw()
     // Configure port D for ext push button
     GPIO_PORTA_DEN_R = 0x0C;  // enable data on pc6 and pc7
     GPIO_PORTA_PUR_R = 0x0C;  // Enable internal pull-ups
-    //GPIOPinTypeGPIOInput(0x40004000, GPIO_PIN_2 | GPIO_PIN_3);
     GPIOIntTypeSet(0x40004000 , GPIO_PIN_2 | GPIO_PIN_3, GPIO_FALLING_EDGE);
     GPIOIntEnable(0x40004000, GPIO_PIN_2 | GPIO_PIN_3);
     IntEnable(INT_GPIOA);
