@@ -225,7 +225,7 @@ void putPacket()
 void transmitPacketISR()
 {
 
-           // BLUE_LED ^= 1;
+            BLUE_LED ^= 1;
             trainingPackets(4);
             puthUart1(0x41);
             puthUart1(0x42);
@@ -315,20 +315,6 @@ void digitset()
 void portAisr()
 {
 
-   /* if(!LEFT_PB)
-    {
-        leftPbPressed = true;
-        //GPIOIntDisable(PORTA_BASE_ADDR, GPIO_INT_PIN_3);
-        GPIO_PORTA_IM_R = 0x04;
-    }
-
-    if(!RIGHT_PB)
-       {
-           rightPbPressed = true;
-           GPIO_PORTA_IM_R = 0x80;
-           //GPIOIntDisable(PORTA_BASE_ADDR, GPIO_INT_PIN_2);
-       } */
-
     switch(GPIO_PORTA_RIS_R)
     {
     case 0x00000004 :
@@ -394,7 +380,6 @@ int main(void)
   //  setGraphicsLcdTextPosition(84, 5);
   //  putsGraphicsLcd("Text");
 
-  //  TIMER1_IMR_R = TIMER_IMR_TATOIM;                 // turn-on interrupts
 
     while (1)
     {
@@ -405,7 +390,6 @@ int main(void)
             leftPbPressed = false;
             RED_LED ^= 1;
             GPIOIntEnable(PORTA_BASE_ADDR, GPIO_INT_PIN_3);
-            //GPIO_PORTA_IM_R = 0x08;
 
 
         }
@@ -415,7 +399,6 @@ int main(void)
             rightPbPressed = false;
             GREEN_LED ^= 1;
             GPIOIntEnable(PORTA_BASE_ADDR, GPIO_INT_PIN_2);
-           // GPIO_PORTA_IM_R = 0x04;
 
         }
 
@@ -424,7 +407,6 @@ int main(void)
             enterPressed = false;
             GREEN_LED ^= 1;
             RED_LED ^= 1;
-            //GPIO_PORTF_IM_R = 0x10;
             GPIOIntEnable(PORTF_BASE_ADDR, GPIO_INT_PIN_4);
         }
 

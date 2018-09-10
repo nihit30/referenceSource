@@ -32,7 +32,7 @@ void initHw()
     // 1 Push button on PF4, 0x10
     // Configure port C for external push buttons
     // Configure LED and pushbutton pins
-    GPIO_PORTF_DIR_R = 0x0A;
+    GPIO_PORTF_DIR_R |= 0x0A;
     GPIO_PORTF_DEN_R |= 0x1A;  // enable LEDs and pushbuttons
     GPIO_PORTF_PUR_R |= 0x10;  // enable internal pull-up for push button
     GPIOIntTypeSet(0x40025000, GPIO_PIN_4, GPIO_FALLING_EDGE);
@@ -106,6 +106,7 @@ void initHw()
     TIMER1_TAILR_R = 0x04C4B400;
     NVIC_EN0_R |= 1 << (INT_TIMER1A - 16);     // turn-on interrupt 37 (TIMER1A)
     TIMER1_CTL_R |= TIMER_CTL_TAEN;                  // turn-on timer
+    TIMER1_IMR_R = TIMER_IMR_TATOIM;                 // turn-on interrupts
 
     SYSCTL_RCGCPWM_R |= SYSCTL_RCGCPWM_R0;
     GPIO_PORTB_DEN_R |= 0xC0;
