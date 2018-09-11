@@ -14,7 +14,6 @@ main.obj: /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/st
 main.obj: /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/_ti_config.h
 main.obj: /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/linkage.h
 main.obj: ../tm4c123gh6pm.h
-main.obj: ../lcdDriver.h
 main.obj: ../initHw.h
 main.obj: /Users/nihit/Desktop/TivaWare_C_Series-2.1.4.178/driverlib/gpio.h
 
@@ -32,6 +31,5 @@ main.obj: /Users/nihit/Desktop/TivaWare_C_Series-2.1.4.178/driverlib/gpio.h
 /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/_ti_config.h: 
 /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/linkage.h: 
 ../tm4c123gh6pm.h: 
-../lcdDriver.h: 
 ../initHw.h: 
 /Users/nihit/Desktop/TivaWare_C_Series-2.1.4.178/driverlib/gpio.h: 

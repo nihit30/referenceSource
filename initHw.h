@@ -4,8 +4,6 @@
 #define INC_INITHW_H_
 
 
-
-
 void initHw(void);
 
 
