@@ -58,6 +58,7 @@ extern uint32_t __STACK_TOP;
 extern void transmitPacketISR(void);
 extern void portAisr(void);
 extern void portFisr(void);
+extern void timer2Isr(void);
 
 //*****************************************************************************
 //
@@ -109,7 +110,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // Timer 0 subtimer B
     transmitPacketISR,                      // Timer 1 subtimer A
     IntDefaultHandler,                      // Timer 1 subtimer B
-    IntDefaultHandler,                      // Timer 2 subtimer A
+    timer2Isr,                      // Timer 2 subtimer A
     IntDefaultHandler,                      // Timer 2 subtimer B
     IntDefaultHandler,                      // Analog Comparator 0
     IntDefaultHandler,                      // Analog Comparator 1

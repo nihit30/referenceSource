@@ -103,10 +103,21 @@ void initHw()
       TIMER1_CTL_R &= ~TIMER_CTL_TAEN;      // turn-off timer before reconfiguring
       TIMER1_CFG_R = TIMER_CFG_32_BIT_TIMER;    // configure as 32-bit timer (A+B)
       TIMER1_TAMR_R = TIMER_TAMR_TAMR_PERIOD; // configure for periodic mode (count down)
-      TIMER1_TAILR_R = 0x04C4B400;
+      TIMER1_TAILR_R = 0x04C4B400;      // 1 sec
       NVIC_EN0_R |= 1 << (INT_TIMER1A - 16);     // turn-on interrupt 37 (TIMER1A)
       TIMER1_CTL_R |= TIMER_CTL_TAEN;                  // turn-on timer
       TIMER1_IMR_R = TIMER_IMR_TATOIM;                 // turn-on interrupts
+
+      // TIMER SECTION
+    // Configure Timer 1 as the time base to transmit packets in specified time period
+    SYSCTL_RCGCTIMER_R |= SYSCTL_RCGCTIMER_R2;       // turn-on timer
+    TIMER2_CTL_R &= ~TIMER_CTL_TAEN;      // turn-off timer before reconfiguring
+    TIMER2_CFG_R = TIMER_CFG_32_BIT_TIMER;    // configure as 32-bit timer (A+B)
+    TIMER2_TAMR_R = TIMER_TAMR_TAMR_PERIOD; // configure for periodic mode (count down)
+    TIMER2_TAILR_R = 0x04C4B400;      // 1 sec
+    NVIC_EN0_R |= 1 << (INT_TIMER2A - 16);     // turn-on interrupt 37 (TIMER1A)
+    //TIMER2_CTL_R |= TIMER_CTL_TAEN;                  // turn-on timer
+    TIMER2_IMR_R = TIMER_IMR_TATOIM;                 // turn-on interrupts
 
       // LCD will not work for PWM on PB6, change pin assignment
   /*   SYSCTL_RCGCPWM_R |= SYSCTL_RCGCPWM_R0;

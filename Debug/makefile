@@ -141,7 +141,7 @@ all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 ReferenceSource.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: ARM Linker'
-	"/Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --define=ccs="ccs" --define=PART_TM4C123GH6PM -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi -z -m"ReferenceSource.map" --heap_size=0 --stack_size=512 -i"/Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/lib" -i"/Users/nihit/Desktop/TivaWare_C_Series-2.1.4.178/driverlib" -i"/Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="ReferenceSource_linkInfo.xml" --rom_model -o "ReferenceSource.out" $(ORDERED_OBJS)
+	"/Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --define=ccs="ccs" --define=PART_TM4C123GH6PM -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi -z -m"ReferenceSource.map" --heap_size=0 --stack_size=512 -i"/Users/nihit/Desktop/TivaWare_C_Series-2.1.4.178/driverlib/ccs/Debug" -i"/Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include" -i"/Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/lib" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="ReferenceSource_linkInfo.xml" --rom_model -o "ReferenceSource.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 

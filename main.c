@@ -28,6 +28,16 @@
 #define CS_NOT       (*((volatile uint32_t *)(0x42000000 + (0x400053FC-0x40000000)*32 + 1*4)))
 #define A0           (*((volatile uint32_t *)(0x42000000 + (0x400053FC-0x40000000)*32 + 6*4)))
 
+#define SETTINGS_MENU 4
+uint8_t thousands = 0;
+uint8_t hundreds = 0;
+uint8_t tens = 0;
+uint8_t units = 0;
+
+uint8_t X[5];
+uint8_t Y[5];
+uint8_t Z[5];
+
 // Set pixel arguments
 #define CLEAR  0
 #define SET    1
@@ -57,15 +67,18 @@
 #define RIGHT_PB_PRESS 0x22
 #define ENTER_PB_PRESS 0x33
 
-
-static uint8_t leftPbCount = 1;
-static uint8_t rightPbCount = 0;
-static uint8_t enterPbCount = 0;
+bool inputComplete = false;
 
 bool leftPbPressed = false;
 bool rightPbPressed = false;
 bool enterPbPressed = false;
+bool settingMode = false;
 uint8_t pbPressedValue = 0x00;
+
+static uint8_t checkUserReq = 0;
+static uint8_t leftPbPressValue = 0;
+
+volatile uint8_t digitValue = 0;
 
 uint32_t sum;
 uint8_t data[12];
@@ -76,6 +89,7 @@ float axis[3]={25.1,2.2,3.3};
 float *locate,value;
 
 uint16_t dec_point[2];
+
 
 //-----------------------------------------------------------------------------
 // Global variables
@@ -397,6 +411,22 @@ void putsGraphicsLcd(char str[])
         putcGraphicsLcd(str[i++]);
 }
 
+void puthGraphicsLcd(uint8_t h)
+{
+    uint8_t i, val;
+    uint8_t uc;
+    // convert to unsigned to access characters > 127
+    uc = h;
+    for (i = 0; i < 5; i++)
+    {
+        val = charGen[uc-' '][i];
+        pixelMap[txtIndex++] = val;
+        sendGraphicsLcdData(val);
+    }
+    pixelMap[txtIndex++] = 0;
+    sendGraphicsLcdData(0);
+}
+
 
 void waitMicrosecond(uint32_t us)
 {
@@ -582,70 +612,6 @@ void blinkLED()
     RED_LED = 0;
 }
 
-bool buttonPress()
-{
-   // return (UP_PB | RIGHT_PB | LEFT_PB);
-}
-
-void digitset()
-{
-    uint16_t dec_point[3], temp, *curser_ptr,curser_ptr_value=0;
-    float *locate_float, fvalue, value2;
-
-    curser_ptr = &dec_point[0];
-
-    locate_float = &axis[0];
-
-
-        fvalue = *locate_float;
-        temp = fvalue;
-          if (temp / 10 >= 1)
-        {
-
-          value2 = (fvalue - temp) * 10;
-          dec_point[0] = temp / 10;  // in 32.1 contain 3
-          dec_point[1] = temp % 10;  // in 32.1 contain 2
-          dec_point[2] = value2;     // in 32.1 contain 1
-        }
-          else
-          {
-              value2 = (fvalue - temp) * 10;
-              dec_point[0] = 0 ;
-              dec_point[1] = temp;
-              dec_point[2] = value2;
-              curser_ptr++;
-          }
-
-
-        while(!(RIGHT_PB == 0 && LEFT_PB ==0 ))
-        {
-
-         if (RIGHT_PB == 0 && curser_ptr_value<=2)
-          {
-            curser_ptr_value++;
-            curser_ptr++;
-          }
-         if (LEFT_PB == 0 && curser_ptr_value>0)
-         {
-            curser_ptr_value--;
-            curser_ptr--;
-         }
-         //if (UP_PB == 0)
-         {
-           *curser_ptr = *curser_ptr+1;
-           if(*curser_ptr >= 10)
-                  *curser_ptr=0;
-         }
-
-
-         BLUE_LED=1;
-
-        }
-          axis[0]=dec_point[0]*10+dec_point[1]+(0.1*dec_point[2]);
-
-
-
-}
 
 void portAisr()
 {
@@ -655,8 +621,8 @@ void portAisr()
     case 0x00000004 :
     {
         leftPbPressed = true;
+        leftPbPressValue++;
         pbPressedValue = LEFT_PB_PRESS;          // Left
-        RED_LED ^= 1;
         break;
     }
 
@@ -665,16 +631,11 @@ void portAisr()
 
         rightPbPressed = true;
         pbPressedValue = RIGHT_PB_PRESS;          // Right
-        GREEN_LED ^= 1;
         break;
     }
 
     default :
     {
-        leftPbPressed = false;
-        rightPbPressed = false;
-        enterPbPressed = false;
-        pbPressedValue = 0x00;
         break;
     }
 
@@ -687,14 +648,11 @@ void portAisr()
 void portFisr()
 {
 
-    if(!ENTER_PB)
-    {
-        enterPbPressed = true;
-        pbPressedValue = RIGHT_PB_PRESS;
-        BLUE_LED ^= 1;
-        GPIOIntDisable(PORTF_BASE_ADDR, GPIO_INT_PIN_4);
-    }
 
+        checkUserReq++;
+        enterPbPressed = true;
+        pbPressedValue = ENTER_PB_PRESS;
+        GPIOIntDisable(PORTF_BASE_ADDR, GPIO_INT_PIN_4);
         GPIO_PORTF_ICR_R = 0x10; // 0x10
 
 }
@@ -704,21 +662,250 @@ bool pbHit()
     return (leftPbPressed | rightPbPressed | enterPbPressed);
 }
 
-
-
-
-int main(void)
+void whichPbPressed()
 {
+
+
+    switch (pbPressedValue)
+    {
+    case LEFT_PB_PRESS:
+    {
+        RED_LED ^= 1;
+        break;
+    }
+    case RIGHT_PB_PRESS:
+    {
+        GREEN_LED ^= 1;
+        break;
+    }
+    case ENTER_PB_PRESS:
+    {
+        BLUE_LED ^= 1;
+        break;
+    }
+    default:
+    {
+        break;
+    }
+
+    }
+
+}
+
+void timer2Isr()
+{
+    __asm(" pop {pc}");
+
+}
+
+
+uint8_t h2c(uint8_t in)
+{
+    return (in+48);
+}
+
+void checkLeftPbPress()
+{
+    while(LEFT_PB);
+}
+
+void checkRightPbPress()
+{
+    while(RIGHT_PB);
+}
+
+void checkEnterPbPress()
+{
+    while(ENTER_PB);
+}
+
+
+void setCursor(uint8_t col, uint8_t pg)
+{
+    setGraphicsLcdTextPosition(col, pg);
+    putsGraphicsLcd("^");
+}
+
+void clearCursor(uint8_t col, uint8_t pg)
+{
+    setGraphicsLcdTextPosition(col, pg);
+    putsGraphicsLcd(" ");
+}
+
+
+
+void displayInteger(uint8_t value, uint8_t col, uint8_t pg)
+{
+    setGraphicsLcdTextPosition(col, pg);
+    putcGraphicsLcd(value + 48);
+
+}
+
+void displayString(char in[], uint8_t col, uint8_t pg)
+{
+    setGraphicsLcdTextPosition(col, pg);
+    putsGraphicsLcd(in);
+}
+
+
+
+void getDigit(uint8_t col, uint8_t pg)
+{
+    digitValue = 0;
+    bool pbStatus = false;
+    enterPbPressed = false;
+    //setCursor(20,5);
+    setCursor(col, pg+1);
+    while(!pbStatus)
+    {
+        //displayInteger(digitValue, 20, 4);
+        digitValue = digitValue % 10;
+        displayInteger(digitValue, col, pg);
+        digitValue++;
+        waitMicrosecond(1000000);
+        if(enterPbPressed)
+        {
+            pbStatus = true;
+            //displayInteger(digitValue, 20, 4);
+            displayInteger((digitValue-1), col, pg);
+            //clearCursor(20,5);
+            clearCursor(col, pg+1);
+            //get100(whichAxis);
+            thousands = digitValue;
+        }
+
+      }
+
+}
+
+void getHundred(uint8_t col, uint8_t pg)
+{
+    getDigit(col, pg);
+}
+
+void getTen(uint8_t col, uint8_t pg)
+{
+    getDigit(col, pg);
+}
+
+void getUnit(uint8_t col, uint8_t pg)
+{
+    getDigit(col, pg);
+}
+
+void getThousand(uint8_t col, uint8_t pg)
+{
+    getDigit(col, pg);
+}
+
+
+void userInputFromPb()
+{
+    uint8_t beaconSelected = 0;
+    uint8_t numberOfBeacons = 0;
+    bool beaconSelectStatus = true;
+    uint8_t currentBeacon = 0;
+    enterPbPressed = false;
+    uint8_t currentAxis = 0;
+
+    clearGraphicsLcd();
+    displayString("Setting mode", 1, 2);
+    displayString("Total Beacons", 1, 4);
+
+    while (numberOfBeacons < 10)
+    {
+        numberOfBeacons++;
+        if (enterPbPressed)
+        {
+            beaconSelectStatus = false;
+            enterPbPressed = false;
+            numberOfBeacons = numberOfBeacons - 1;
+            displayInteger(numberOfBeacons, 110, 4);
+            break;
+        }
+        displayInteger(numberOfBeacons, 110, 4);
+        refreshGraphicsLcd();
+        waitMicrosecond(1000000);
+        numberOfBeacons = numberOfBeacons % 9;
+    }
+
+    while (!beaconSelectStatus)
+    {
+        // beaconSelectStatus = true;
+        clearGraphicsLcd();
+        displayString("BEACON", 1, 2);
+
+        for (currentBeacon = 1; currentBeacon <= numberOfBeacons;
+                currentBeacon++)
+        {
+
+            for(currentAxis = 0; currentAxis < 3; currentAxis++)
+            {
+                switch (currentAxis)
+                {
+                    case 0:         // X axis
+                    {
+                        inputComplete = false;
+                        displayInteger((currentAxis+1), 43, 2);
+                        displayString("X", 1, 4);             // "X : "
+                        displayString(":", 10, 4);
+                        while(!inputComplete)
+                        {
+                            getThousand(20, 4);
+                            getHundred(27, 4);
+                            getTen(34, 4);
+                            getUnit(41, 4);
+                            inputComplete = true;
+                        }
+                        break;
+                    }
+                    case 1:                 // Y axis
+                    {
+                    inputComplete = false;
+                    displayInteger((currentAxis + 1), 43, 2);
+                    displayString("X", 1, 4);             // "X : "
+                    displayString(":", 10, 4);
+                    while (!inputComplete)
+                    {
+                        getThousand(20, 5);
+                        getHundred(27, 5);
+                        getTen(34, 5);
+                        getUnit(41, 5);
+                        inputComplete = true;
+                    }
+
+                            break;
+                    }
+                    case 2:                 // Z axis
+                    {
+
+                            break;
+                    }
+
+                }
+
+
+
+            }
+
+            //displayInteger(currentBeacon, 43, 2);
+            //getCoordinates(0x01);       // X-axis  : 0x01
+        }
+        }
+
+}
+
+
+
+
+int main(void) {
 
 
     initHw();
     initGraphicsLcd();
     blinkLED();
     createPacket(&data, dataLength);
-
-    // Draw text on screen
-       setGraphicsLcdTextPosition(3, 3);           // (col, page)
-       putsGraphicsLcd("Text");
+    displayString("Welcome to A-LPS", 0, 0);
 
 
     while (1)
@@ -729,31 +916,19 @@ int main(void)
             leftPbPressed = false;
             rightPbPressed = false;
             enterPbPressed = false;
+           // whichPbPressed();
 
-            switch(pbPressedValue)
+               // RED_LED = 1;
+               // GREEN_LED = 1;
+                //BLUE_LED = 1;
+           while (checkUserReq == SETTINGS_MENU)
             {
-                case LEFT_PB_PRESS :
-                {
-
-                    RED_LED ^= 1;
-                    break;
-                }
-                case RIGHT_PB_PRESS :
-                {
-                    GREEN_LED ^= 1;
-                    break;
-                }
-                case ENTER_PB_PRESS :
-                {
-                    BLUE_LED ^= 1;
-                    break;
-                }
-                default :
-                {
-                    break;
-                }
-
+                settingMode = true;
+                userInputFromPb();
             }
+
+
+
         }
 
 
