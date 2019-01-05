@@ -8,6 +8,13 @@
 // TO DO : Add ability to trigger transmission (reference signals) on user request only
 // TO DO : Add bluetooth for seamless cellphone integration
 
+// HOW TO TAKE USER INPUT FROM PUSH BUTTON -
+// 1. Press ENTER button 4 times to access settings menu ( ENTER button is on PF4 )
+// 2. Now LCD should display rolling intergers from 1 to 9. Press ENTER when the count reaches desired value(number of beacons).
+// 3. If LCD does not display rolling numbers, reset controller and start again.
+// 4. If everything works correctly you should see the rolling display stop and total number of beacons displayed.
+// 5. Now LCD should automatically display "BEACON 1   X : "
+// 6. Now thousandth place should start rolling intergers from 1 to 9. Press ENTER when the count reaches desired value. LCD should automatically proceed to next digit place.
 
 // FUTURE GOALS:
 // Use cheap 8051 for all beacons and off-load computation to reference source to save cost and increase efficiency
@@ -18,6 +25,7 @@
 #include "tm4c123gh6pm.h"
 #include "initHw.h"
 #include "driverlib/gpio.h"
+#include "driverlib/interrupt.h"
 //#include "lcdDriver.h"
 
 
@@ -590,7 +598,7 @@ void putPacket()
 void transmitPacketISR()
 {
 
-            //BLUE_LED ^= 1;
+            BLUE_LED ^= 1;
             trainingPackets(4);
             puthUart1(0x41);
             puthUart1(0x42);
@@ -664,8 +672,6 @@ bool pbHit()
 
 void whichPbPressed()
 {
-
-
     switch (pbPressedValue)
     {
     case LEFT_PB_PRESS:
@@ -689,7 +695,6 @@ void whichPbPressed()
     }
 
     }
-
 }
 
 void timer2Isr()

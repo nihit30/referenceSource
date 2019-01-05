@@ -16,6 +16,7 @@ main.obj: /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/li
 main.obj: ../tm4c123gh6pm.h
 main.obj: ../initHw.h
 main.obj: /Users/nihit/Desktop/TivaWare_C_Series-2.1.4.178/driverlib/gpio.h
+main.obj: /Users/nihit/Desktop/TivaWare_C_Series-2.1.4.178/driverlib/interrupt.h
 
 ../main.c: 
 /Applications/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdint.h: 
@@ -33,3 +34,4 @@ main.obj: /Users/nihit/Desktop/TivaWare_C_Series-2.1.4.178/driverlib/gpio.h
 ../tm4c123gh6pm.h: 
 ../initHw.h: 
 /Users/nihit/Desktop/TivaWare_C_Series-2.1.4.178/driverlib/gpio.h: 
+/Users/nihit/Desktop/TivaWare_C_Series-2.1.4.178/driverlib/interrupt.h: 
