@@ -1,3 +1,4 @@
+// Credits : Dr. Jason Losh
 // Reference source is responsible to transmit 'synchronization signal' to beacons and mobile receiver using RF modules.
 // RF modules are connected to the controller on UART serial interface.
 // Packet is transmitted every 1sec using a timer interrupt
